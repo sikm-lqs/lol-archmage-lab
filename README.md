@@ -4,6 +4,9 @@
 
 **非官方、理论工具，不操作游戏客户端。固定快照工具；发布通过手动 GitHub Actions 完成。**
 
+- 网站：https://sikm-lqs.github.io/lol-archmage-lab/
+- 仓库：https://github.com/sikm-lqs/lol-archmage-lab
+
 ## 本地使用
 
 需要 Node.js 22 或以上版本。网页运行和构建没有第三方依赖。
@@ -90,13 +93,13 @@ npm run test:e2e
 
 测试覆盖搜索、筛选、技能说明、并列加点、手动等级调整、键盘操作、加载失败、静态子路径与 320–1440 像素布局；截图位于忽略提交的 `artifacts/`。
 
-## 后续 GitHub Pages 部署
+## GitHub Pages 部署
 
 已获需求方授权创建公开仓库并部署。首次和后续发布都使用手动工作流。
 
-1. 将本目录作为独立 Git 仓库上传到你之后创建的公开 GitHub 仓库。
+1. 首次已使用 GitHub CLI 创建公开仓库并推送 `main`。后续修改后先提交并 `git push`。
 2. 在仓库 Settings → Pages 中将 Source 设为 **GitHub Actions**。
-3. 在 Actions 中手动运行 **Deploy Archmage Lab**。
+3. 在 Actions → **Deploy Archmage Lab** → **Run workflow**，选择 `main` 并运行；或执行 `gh workflow run pages.yml`。
 4. 成功后通过部署结果给出的地址访问，手机和电脑使用同一地址。
 
 工作流只由手动按钮触发，不定时更新数据，也不在每次推送时自动发布。`dist/` 是唯一发布目录；ZIP、旧程序、证书、原始缓存和测试截图不会进入站点。
