@@ -1,0 +1,562 @@
+[
+  {
+    "championId": 7,
+    "spells": [
+      {
+        "slot": "R",
+        "maxRank": 3,
+        "cooldownByLevel": [
+          5.0,
+          5.0,
+          5.0
+        ],
+        "castTime": null,
+        "nameEn": "Mimic",
+        "nameZh": "故技重施",
+        "spellKey": "r",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 17,
+    "spells": [
+      {
+        "slot": "R",
+        "maxRank": 3,
+        "cooldownByLevel": [
+          35.0,
+          30.0,
+          25.0
+        ],
+        "castTime": null,
+        "nameEn": "Noxious Trap",
+        "nameZh": "种蘑菇",
+        "spellKey": "r",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 19,
+    "spells": [
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          3.0,
+          3.0,
+          3.0,
+          3.0,
+          3.0
+        ],
+        "castTime": null,
+        "nameEn": "Blood Hunt",
+        "nameZh": "鲜血追猎",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 22,
+    "spells": [
+      {
+        "slot": "E",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          90.0,
+          80.0,
+          70.0,
+          60.0,
+          50.0
+        ],
+        "castTime": null,
+        "nameEn": "Hawkshot",
+        "nameZh": "鹰击长空",
+        "spellKey": "e",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 30,
+    "spells": [
+      {
+        "slot": "Q",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "castTime": null,
+        "nameEn": "Lay Waste",
+        "nameZh": "荒芜",
+        "spellKey": "q",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 32,
+    "spells": [
+      {
+        "slot": "Q",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          16.0,
+          15.0,
+          14.0,
+          13.0,
+          12.0
+        ],
+        "castTime": null,
+        "nameEn": "Bandage Toss",
+        "nameZh": "绷带牵引",
+        "spellKey": "q",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 41,
+    "spells": [
+      {
+        "slot": "E",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          17.0,
+          16.0,
+          15.0,
+          14.0,
+          13.0
+        ],
+        "castTime": null,
+        "nameEn": "Powder Keg",
+        "nameZh": "火药桶",
+        "spellKey": "e",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 42,
+    "spells": [
+      {
+        "slot": "R",
+        "maxRank": 3,
+        "cooldownByLevel": [
+          20.0,
+          20.0,
+          20.0
+        ],
+        "castTime": null,
+        "nameEn": "Missile Barrage",
+        "nameZh": "火箭轰击",
+        "spellKey": "r",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 51,
+    "spells": [
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          26.0,
+          22.0,
+          18.0,
+          14.0,
+          10.0
+        ],
+        "castTime": null,
+        "nameEn": "Yordle Snap Trap",
+        "nameZh": "约德尔诱捕器",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 68,
+    "spells": [
+      {
+        "slot": "E",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          6.0,
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        "castTime": null,
+        "nameEn": "Electro Harpoon",
+        "nameZh": "电子鱼叉",
+        "spellKey": "e",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 74,
+    "spells": [
+      {
+        "slot": "Q",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "castTime": null,
+        "nameEn": "H-28 G Evolution Turret",
+        "nameZh": "H-28 G 进化炮台",
+        "spellKey": "q",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 107,
+    "spells": [
+      {
+        "slot": "Q",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          6.0,
+          5.5,
+          5.0,
+          4.5,
+          4.0
+        ],
+        "castTime": null,
+        "nameEn": "Savagery",
+        "nameZh": "残忍无情",
+        "spellKey": "q",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      },
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          16.0,
+          14.5,
+          13.0,
+          11.5,
+          10.0
+        ],
+        "castTime": null,
+        "nameEn": "Battle Roar",
+        "nameZh": "战争咆哮",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      },
+      {
+        "slot": "E",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          10.0,
+          10.0,
+          10.0,
+          10.0,
+          10.0
+        ],
+        "castTime": null,
+        "nameEn": "Bola Strike",
+        "nameZh": "套索打击",
+        "spellKey": "e",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 143,
+    "spells": [
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          16.0,
+          14.5,
+          13.0,
+          11.5,
+          10.0
+        ],
+        "castTime": null,
+        "nameEn": "Rampant Growth",
+        "nameZh": "狂野生长",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 161,
+    "spells": [
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          18.0,
+          17.0,
+          16.0,
+          15.0,
+          14.0
+        ],
+        "castTime": null,
+        "nameEn": "Void Rift",
+        "nameZh": "虚空裂隙",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 202,
+    "spells": [
+      {
+        "slot": "E",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          24.0,
+          21.5,
+          19.0,
+          16.5,
+          14.0
+        ],
+        "castTime": null,
+        "nameEn": "Captive Audience",
+        "nameZh": "万众倾倒",
+        "spellKey": "e",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 254,
+    "spells": [
+      {
+        "slot": "E",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          12.0,
+          11.0,
+          10.0,
+          9.0,
+          8.0
+        ],
+        "castTime": null,
+        "nameEn": "Relentless Force",
+        "nameZh": "透体之劲",
+        "spellKey": "e",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 268,
+    "spells": [
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          12.0,
+          10.5,
+          9.0,
+          7.5,
+          6.0
+        ],
+        "castTime": null,
+        "nameEn": "Arise!",
+        "nameZh": "沙兵现身",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 427,
+    "spells": [
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "castTime": null,
+        "nameEn": "Brushmaker",
+        "nameZh": "揠苗助攻",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 429,
+    "spells": [
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          90.0,
+          80.0,
+          70.0,
+          60.0,
+          50.0
+        ],
+        "castTime": null,
+        "nameEn": "Sentinel",
+        "nameZh": "哨兵",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 432,
+    "spells": [
+      {
+        "slot": "W",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          18.0,
+          18.0,
+          18.0,
+          18.0,
+          18.0
+        ],
+        "castTime": null,
+        "nameEn": "Caretaker's Shrine",
+        "nameZh": "游神圣坛",
+        "spellKey": "w",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 895,
+    "spells": [
+      {
+        "slot": "E",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          26.0,
+          22.5,
+          19.0,
+          15.5,
+          12.0
+        ],
+        "castTime": null,
+        "nameEn": "Slipstream",
+        "nameZh": "纵情逐流",
+        "spellKey": "e",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  },
+  {
+    "championId": 902,
+    "spells": [
+      {
+        "slot": "E",
+        "maxRank": 5,
+        "cooldownByLevel": [
+          17.0,
+          16.0,
+          15.0,
+          14.0,
+          13.0
+        ],
+        "castTime": null,
+        "nameEn": "Warm Hugs",
+        "nameZh": "融融情谊",
+        "spellKey": "e",
+        "charged": true,
+        "notes": [
+          "充能技能，理论值偏保守（CD取充能时间，来自ammo.ammoRechargeTime）"
+        ]
+      }
+    ]
+  }
+]

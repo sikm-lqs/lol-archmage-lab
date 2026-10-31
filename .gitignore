@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.cache/
+.env*
+*.pem
+archive/
+reference/
+artifacts/
+__pycache__/
+*.pyc
