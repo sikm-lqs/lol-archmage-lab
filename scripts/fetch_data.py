@@ -26,21 +26,22 @@ INTERNAL_AMMO = {("Karthus", "Q"), ("Leblanc", "R"),
 REVIEW_SLOTS = {
     "Ahri": "R", "Akali": "ER", "Aatrox": "Q", "Anivia": "R",
     "AurelionSol": "Q", "Bard": "W", "Belveth": "R", "Briar": "WE",
-    "Camille": "Q", "DrMundo": "R", "Gangplank": "E", "Gragas": "Q",
-    "Gwen": "R", "Illaoi": "W", "Ivern": "Q", "Janna": "Q",
-    "Karma": "R", "Karthus": "E", "Kennen": "E", "Kled": "Q",
+    "Camille": "Q", "Darius": "R", "Ezreal": "Q", "Gangplank": "E", "Gragas": "Q",
+    "Gwen": "R", "Irelia": "Q", "Ivern": "Q", "Janna": "Q",
+    "Karma": "R", "Karthus": "E", "Kassadin": "E", "Katarina": "E",
+    "Kennen": "E", "Kled": "QW",
     "KSante": "R", "Leblanc": "WR", "LeeSin": "QWE", "MasterYi": "Q",
-    "Naafiri": "W", "Neeko": "W", "Nilah": "Q", "Nunu": "WR",
-    "Olaf": "R", "Pantheon": "Q", "Pyke": "Q", "RekSai": "QWER",
-    "Renekton": "E", "Rengar": "QWE", "Riven": "QR", "Samira": "R",
-    "Sett": "W", "Shaco": "R", "Singed": "Q", "Sion": "Q",
-    "Skarner": "Q", "Smolder": "Q", "Swain": "R", "Sylas": "R",
+    "Naafiri": "W", "Neeko": "W", "Nunu": "WR",
+    "Olaf": "R", "Pantheon": "Q", "Pyke": "QR", "Qiyana": "W", "RekSai": "QWER",
+    "Renata": "Q", "Renekton": "E", "Rengar": "QWE", "Riven": "QR", "Samira": "R",
+    "Shaco": "R", "Singed": "Q", "Sion": "Q",
+    "Skarner": "Q", "Swain": "R", "Sylas": "R",
     "TahmKench": "R", "Taliyah": "Q", "Talon": "E",
     "Taric": "Q", "Tristana": "W", "TwistedFate": "W",
-    "Urgot": "WR", "Varus": "Q", "Viego": "R", "Vladimir": "E",
+    "Urgot": "WR", "Varus": "Q", "Vex": "R", "Viego": "R", "Vladimir": "E",
     "Volibear": "Q", "Warwick": "Q", "Wukong": "R", "Xerath": "QR",
     "Yasuo": "Q", "Yone": "Q", "Yorick": "Q", "Yuumi": "W",
-    "Zac": "E", "Zeri": "Q", "Zoe": "Q",
+    "Zac": "E", "Zed": "WR", "Zeri": "Q", "Zilean": "W", "Zoe": "Q",
 }
 
 
@@ -69,6 +70,10 @@ def plain(value):
 
 
 def icon(image):
+    if not re.fullmatch(r"[A-Za-z0-9_-]+\.png", image["sprite"]):
+        raise ValueError("不安全的图标文件名")
+    if not all(type(image[key]) is int and image[key] >= 0 for key in ("x", "y", "w", "h")):
+        raise ValueError("图标坐标必须是非负整数")
     return {key: image[key] for key in ("sprite", "x", "y", "w", "h")}
 
 
@@ -95,7 +100,7 @@ def normalize(champion, old_by_id):
             notes.append("未取得完整且非零的逐级 CD，暂不参与计算")
         elif review and not charged:
             status = "review"
-            notes.append("形态、重施放或条件交互待核验，暂不参与排名")
+            notes.append("形态、重施放、属性或条件冷却交互待核验，暂不参与排名")
         else:
             status = "charge" if charged else "standard"
         spells.append({
@@ -115,19 +120,25 @@ def main():
     index = json.loads(get(f"{BASE}/data/zh_CN/champion.json", CACHE / "index.json"))["data"]
     legacy_path = ROOT / "reference/lol-archmage-refund/data/champions_spells.json"
     # 旧快照只用于充能字段，不执行参考程序。没有旧文件时使用已归档的充能来源快照。
-    charge_snapshot = ROOT / "data" / "charge-source-16.21.1.json"
+    charge_snapshot = ROOT / "data" / f"charge-source-{PATCH}.json"
     if legacy_path.exists() and not charge_snapshot.exists():
         legacy = json.loads(legacy_path.read_text())
+        if legacy.get("patch") != PATCH:
+            raise RuntimeError("充能来源与本次版本不同，拒绝混用；请先准备同版本来源")
         rows = [{"championId": c["championId"],
                  "spells": [s for s in c["spells"] if s.get("charged")]}
                 for c in legacy["champions"]]
         charge_snapshot.parent.mkdir(exist_ok=True)
         charge_snapshot.write_text(json.dumps([c for c in rows if c["spells"]],
                                              ensure_ascii=False, indent=2))
-    legacy = json.loads(charge_snapshot.read_text()) if charge_snapshot.exists() else []
+    if not charge_snapshot.exists():
+        raise RuntimeError("缺少同版本充能来源快照，请先核验后准备，不能静默当作普通技能")
+    legacy = json.loads(charge_snapshot.read_text())
     old = {c["championId"]: c for c in legacy}
 
     def fetch(key):
+        if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*", key):
+            raise ValueError("不安全的英雄 ID")
         content = get(f"{BASE}/data/zh_CN/champion/{key}.json", CACHE / f"{key}.json")
         champion = json.loads(content)["data"][key]
         return normalize(champion, old)
@@ -142,7 +153,10 @@ def main():
     counts = {status: sum(s["status"] == status for c in champions for s in c["spells"])
               for status in ("standard", "charge", "review", "missing")}
     payload = {
-        "patch": PATCH, "fetchedAt": datetime.now(timezone.utc).isoformat(),
+        "patch": PATCH,
+        "fetchedAt": datetime.fromtimestamp(max(p.stat().st_mtime for p in CACHE.glob("*.json")),
+                                            timezone.utc).isoformat(),
+        "generatedAt": datetime.now(timezone.utc).isoformat(),
         "source": f"{BASE}/data/zh_CN/champion/",
         "modeVerified": False, "counts": counts, "champions": champions,
     }
