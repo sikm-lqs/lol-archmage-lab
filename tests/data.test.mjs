@@ -55,9 +55,24 @@ test('all computed combinations independently satisfy both refund inequalities',
       assert.equal(p.best.length, p.combos.filter(combo => nearlyEqual(combo.haste, min)).length);
       for (const combo of p.combos) {
         const factor = 1 + combo.haste / 100;
-        assert.ok(combo.cdA / factor <= .3 * combo.cdB + 1e-8, `${c.id} ${p.id}`);
-        assert.ok(combo.cdB / factor <= .3 * combo.cdA + 1e-8, `${c.id} ${p.id}`);
+        assert.ok(combo.haste <= 500);
+        assert.ok(combo.castsA <= combo.capA && combo.castsB <= combo.capB);
+        if (p.a.status === 'charge') assert.equal(combo.capA, p.a.chargeCaps[combo.rankA - 1]);
+        if (p.b.status === 'charge') assert.equal(combo.capB, p.b.chargeCaps[combo.rankB - 1]);
+        assert.ok(combo.castsA * combo.cdA / factor <= .3 * combo.castsB * combo.cdB + 1e-8, `${c.id} ${p.id}`);
+        assert.ok(combo.castsB * combo.cdB / factor <= .3 * combo.castsA * combo.cdA + 1e-8, `${c.id} ${p.id}`);
       }
     }
+  }
+});
+
+
+test('charge capacities are rank-indexed from the locked primary snapshot', () => {
+  const gp = data.champions.find(c => c.id === 'Gangplank');
+  assert.deepEqual(gp.spells[2].chargeCaps, [3,3,4,4,5]);
+  assert.ok(!analyzeChampion(gp).pairs.some(p => p.id === 'E+R'));
+  for (const c of data.champions) for (const s of c.spells) if (s.status === 'charge') {
+    assert.equal(s.chargeCaps.length, s.maxRank);
+    assert.ok(s.chargeCaps.every(n => Number.isInteger(n) && n > 0));
   }
 });

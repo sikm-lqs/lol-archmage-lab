@@ -33,7 +33,7 @@ test('searches Chinese, title and English; empty results can be cleared', async 
   await search.fill('不存在的英雄000');
   await expect(page.locator('.empty')).toBeVisible();
   await page.getByRole('button', { name: '清空搜索' }).click();
-  await expect(page.locator('.champion-row')).toHaveCount(173);
+  await expect(page.locator('.champion-row')).toHaveCount(150);
 });
 
 test('preserves all tied ranks and lets users explore a non-optimal combination', async ({ page }) => {
@@ -46,7 +46,7 @@ test('preserves all tied ranks and lets users explore a non-optimal combination'
   await page.locator('.optimal-combos [data-ranks]').last().click();
   await expect(page.locator('.more-combos')).toHaveAttribute('open', '');
   await expect(page.locator('.combo-tag.active')).toBeFocused();
-  await page.locator('.pair-tab[data-pair="Q+R"]').click();
+  await expect(page.locator('.pair-tab[data-pair="Q+R"]')).toHaveCount(0);
   await page.locator('#rank-a').selectOption('1');
   await page.locator('#rank-b').selectOption('3');
   await expect(page.locator('.selection-result')).toContainText('急速');
@@ -61,26 +61,25 @@ test('changing ranks updates both cooldowns and threshold', async ({ page }) => 
 });
 
 test('R and charge filters change eligibility; charged skills are explicitly marked', async ({ page }) => {
-  await expect(page.locator('.pair-tab')).toHaveCount(6);
+  await expect(page.locator('.pair-tab')).toHaveCount(3);
   await page.getByLabel('包含 R', { exact: true }).uncheck();
   await expect(page.locator('.pair-tab')).toHaveCount(3);
   await page.getByLabel('包含 R', { exact: true }).check();
   await page.getByRole('searchbox').fill('Teemo');
   await page.locator('.champion-row').click();
-  await page.locator('.pair-tab[data-pair="Q+R"]').click();
-  await expect(page.locator('.research-title')).toContainText('充能近似');
+  await page.locator('.pair-tab[data-pair="W+R"]').click();
+  await expect(page.locator('.research-title')).toContainText('充能循环');
   await page.getByLabel('充能估算', { exact: true }).uncheck();
-  await expect(page.locator('.pair-tab')).toHaveCount(1);
+  await expect(page.locator('.champion-row')).toHaveCount(0);
 });
 
-test('skill descriptions expand and show rank CDs; missing heroes are not zero haste', async ({ page }) => {
+test('skill descriptions expand and show rank CDs; heroes without eligible results are hidden', async ({ page }) => {
   await page.locator('.skill-entry summary').first().click();
   await expect(page.locator('.skill-content').first()).toBeVisible();
   await expect(page.locator('.rank-cd-list').first().locator('> div')).toHaveCount(5);
   await page.getByRole('searchbox').fill('Hwei');
-  await page.locator('.champion-row').click();
-  await expect(page.locator('.no-analysis')).toContainText('暂没有可计算');
-  await expect(page.locator('.big-number')).toHaveCount(0);
+  await expect(page.locator('.champion-row')).toHaveCount(0);
+  await expect(page.locator('.empty')).toContainText('≤ 500');
   await page.getByRole('button', { name: '数据来源与局限' }).click();
   await expect(page.getByRole('dialog')).toContainText('不等于已核实');
 });
@@ -137,3 +136,23 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     if (width === 1440) await page.screenshot({ path: 'artifacts/preview-desktop.png' });
   });
 }
+
+
+test('charge model shows rank capacity and sustained batches; GP ER is excluded, Ashe equal-CD case retained', async ({ page }) => {
+  await page.getByRole('searchbox').fill('Gangplank');
+  await page.locator('.champion-row').click();
+  await expect(page.locator('.pair-tab[data-pair="E+R"]')).toHaveCount(0);
+  await page.locator('.skill-entry').nth(2).locator('summary').click();
+  await expect(page.locator('.skill-entry').nth(2)).toContainText('5 级 · 5 层');
+  await page.getByRole('searchbox').fill('Ashe');
+  await page.locator('.champion-row').click();
+  await page.locator('[data-ranks="4,3"]').click();
+  await expect(page.locator('.selection-result')).toContainText('233⅓');
+  await expect(page.locator('.refund-proof')).toContainText('E × 1 ↔ R × 1');
+  await expect(page.locator('.refund-proof')).toContainText('仍待实测');
+  await page.getByRole('searchbox').fill('Caitlyn');
+  await page.locator('.champion-row').click();
+  await page.locator('.pair-tab[data-pair="W+R"]').click();
+  await expect(page.locator('.refund-proof')).toContainText('W × 3 ↔ R × 1');
+  await page.screenshot({ path: 'artifacts/preview-charge.png', fullPage: true });
+});

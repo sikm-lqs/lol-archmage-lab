@@ -25,7 +25,7 @@
           <p class="intro-copy">找到恰好的加点，让每一次施法，为下一次清空冷却。</p></div>
         <div class="intro-stats" aria-label="模型参数"><div><strong>30<span>%</span></strong><span>基础冷却返还</span></div><span class="stat-divider"></span><div><strong id="champion-count">—</strong><span>英雄数据快照</span></div></div>
       </section>
-      <div class="notice"><span class="notice-icon" aria-hidden="true">i</span><p><strong>理论计算，不等于实战保证。</strong>忽略施法耗时与自然冷却；充能按单层回复时间估算，特殊交互单独标注。数据未核验全部模式修正。</p></div>
+      <div class="notice"><span class="notice-icon" aria-hidden="true">i</span><p><strong>理论计算，不等于实战保证。</strong>忽略施法耗时与自然冷却；充能按逐级容量计算可持续循环；仅展示 ≤ 500 急速的结果。数据未核验全部模式修正。</p></div>
       <div class="workspace">
         <aside class="explorer" aria-label="英雄搜索与列表">
           <div class="explorer-head"><div class="section-label">英雄索引 <span id="result-count">—</span></div>
@@ -39,7 +39,7 @@
         </aside>
         <section id="detail" class="detail" aria-label="英雄互刷分析" tabindex="-1"><div class="loading">正在建立你的研究台…</div></section>
       </div>
-      <footer class="footer"><span>大法师互刷研究所 <span class="muted">/ 一个关于冷却的研究工具</span></span><button id="sources-open" class="text-button">数据来源与局限 ↗</button><p>本项目为非官方研究工具，与 Riot Games 无隶属、认可或赞助关系。游戏名称与素材归各权利人所有。</p></footer>
+      <footer class="footer"><span>大法师互刷研究所 <span class="muted">/ 一个关于冷却的研究工具</span></span><button id="sources-open" class="text-button">数据来源与局限 ↗</button><p>本项目为非官方研究工具，与 Riot Games 无隶属、认可或赞助关系。游戏名称与素材归各权利人所有。</p><p>Archmage Lab isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p></footer>
     </main>
     <dialog id="info-dialog" aria-labelledby="dialog-title"><div class="dialog-head"><p class="eyebrow">RESEARCH NOTES</p><button id="dialog-close" class="quiet-button" aria-label="关闭说明">关闭 ✕</button></div><h2 id="dialog-title"></h2><div id="dialog-body"></div></dialog>
     <script type="module" src="./src/app.mjs"></script>

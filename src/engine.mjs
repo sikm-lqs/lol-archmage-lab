@@ -13,11 +13,26 @@ export function integerHaste(haste) {
 }
 
 export function analyzePair(a, b) {
+  // A single charged ability can cast a bounded batch between ordinary casts.
+  // Two charged abilities require a general interleaving solver: do not claim
+  // a global optimum by merely enumerating two bounded batches.
+  if (a.status === 'charge' && b.status === 'charge') return null;
   const combos = [];
   for (let i = 0; i < a.maxRank; i++) for (let j = 0; j < b.maxRank; j++) {
     const cdA = a.cooldowns[i], cdB = b.cooldowns[j];
     if (!valid(cdA) || !valid(cdB)) continue;
-    combos.push({ rankA: i + 1, rankB: j + 1, cdA, cdB, haste: minimumHaste(cdA, cdB) });
+    const capA = a.status === 'charge' ? a.chargeCaps?.[i] : 1;
+    const capB = b.status === 'charge' ? b.chargeCaps?.[j] : 1;
+    if (![capA, capB].every(n => Number.isInteger(n) && n > 0)) continue;
+    const cycles = [];
+    for (let castsA = 1; castsA <= capA; castsA++) for (let castsB = 1; castsB <= capB; castsB++) {
+      cycles.push({ castsA, castsB, haste: minimumHaste(castsA * cdA, castsB * cdB) });
+    }
+    const haste = Math.min(...cycles.map(c => c.haste));
+    if (haste > 500) continue;
+    const bestCycles = cycles.filter(c => nearlyEqual(c.haste, haste));
+    combos.push({ rankA: i + 1, rankB: j + 1, cdA, cdB, haste, capA, capB,
+      castsA: bestCycles[0].castsA, castsB: bestCycles[0].castsB, cycles: bestCycles });
   }
   if (!combos.length) return null;
   combos.sort((x, y) => x.haste - y.haste || x.rankA - y.rankA || x.rankB - y.rankB);

@@ -77,7 +77,7 @@ def icon(image):
     return {key: image[key] for key in ("sprite", "x", "y", "w", "h")}
 
 
-def normalize(champion, old_by_id):
+def normalize(champion, old_by_id, verified):
     key = champion["id"]
     previous = old_by_id.get(int(champion["key"]), {})
     old_spells = {spell["slot"]: spell for spell in previous.get("spells", [])}
@@ -88,10 +88,14 @@ def normalize(champion, old_by_id):
         cooldowns = spell.get("cooldown", [])
         source = "Data Dragon"
         notes = []
+        charge_caps = None
         if charged:
-            cooldowns = prior.get("cooldownByLevel") or []
-            source = "用户旧快照 / Community Dragon 充能回复时间"
-            notes.append("充能技能：按恢复一层时间代入普通 CD 模型，实际交互待核验")
+            entry = verified.get((key, slot), {})
+            cooldowns = entry.get("cooldowns", [])
+            charge_caps = entry.get("chargeCaps")
+            source = "Community Dragon 16.21 / 逐等级充能与单层回复时间"
+            notes.append("按逐级容量计算多次施放的可持续循环；忽略施放间隔及自然冷却")
+            notes.append("船长多层返还机制由用户实测；其他英雄按相同机制理论外推，尚未实测")
         valid = (len(cooldowns) == spell["maxrank"]
                  and all(isinstance(c, (int, float)) and c > 0 for c in cooldowns))
         review = key in FORM_CHAMPIONS or slot in REVIEW_SLOTS.get(key, "")
@@ -107,6 +111,7 @@ def normalize(champion, old_by_id):
             "slot": slot, "name": spell["name"], "description": plain(spell["description"]),
             "maxRank": spell["maxrank"], "cooldowns": cooldowns, "icon": icon(spell["image"]),
             "status": status, "notes": notes, "source": source,
+            **({"chargeCaps": charge_caps} if charged else {}),
         })
     return {
         "id": key, "numericId": int(champion["key"]), "name": champion["name"],
@@ -135,13 +140,17 @@ def main():
         raise RuntimeError("缺少同版本充能来源快照，请先核验后准备，不能静默当作普通技能")
     legacy = json.loads(charge_snapshot.read_text())
     old = {c["championId"]: c for c in legacy}
+    verified_snapshot = json.loads((ROOT / "data" / f"charge-verified-{PATCH}.json").read_text())
+    if verified_snapshot["patch"] != PATCH:
+        raise RuntimeError("已核验充能快照版本不一致")
+    verified = {(s["id"], s["slot"]): s for s in verified_snapshot["spells"]}
 
     def fetch(key):
         if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*", key):
             raise ValueError("不安全的英雄 ID")
         content = get(f"{BASE}/data/zh_CN/champion/{key}.json", CACHE / f"{key}.json")
         champion = json.loads(content)["data"][key]
-        return normalize(champion, old)
+        return normalize(champion, old, verified)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
         champions = list(pool.map(fetch, sorted(index)))

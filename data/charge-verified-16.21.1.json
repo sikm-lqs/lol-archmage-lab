@@ -1,0 +1,340 @@
+{
+  "patch": "16.21.1",
+  "fetchedAt": "2026-10-31T08:09:48.179771+00:00",
+  "spells": [
+    {
+      "id": "Amumu",
+      "slot": "Q",
+      "cooldowns": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/32.json"
+    },
+    {
+      "id": "Ashe",
+      "slot": "E",
+      "cooldowns": [
+        90.0,
+        80.0,
+        70.0,
+        60.0,
+        50.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/22.json"
+    },
+    {
+      "id": "Azir",
+      "slot": "W",
+      "cooldowns": [
+        12.0,
+        10.5,
+        9.0,
+        7.5,
+        6.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/268.json"
+    },
+    {
+      "id": "Bard",
+      "slot": "W",
+      "cooldowns": [
+        18.0,
+        18.0,
+        18.0,
+        18.0,
+        18.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/432.json"
+    },
+    {
+      "id": "Caitlyn",
+      "slot": "W",
+      "cooldowns": [
+        26.0,
+        22.0,
+        18.0,
+        14.0,
+        10.0
+      ],
+      "chargeCaps": [
+        3,
+        3,
+        4,
+        4,
+        5
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/51.json"
+    },
+    {
+      "id": "Corki",
+      "slot": "R",
+      "cooldowns": [
+        20.0,
+        20.0,
+        20.0
+      ],
+      "chargeCaps": [
+        4,
+        4,
+        4
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/42.json"
+    },
+    {
+      "id": "Gangplank",
+      "slot": "E",
+      "cooldowns": [
+        17.0,
+        16.0,
+        15.0,
+        14.0,
+        13.0
+      ],
+      "chargeCaps": [
+        3,
+        3,
+        4,
+        4,
+        5
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/41.json"
+    },
+    {
+      "id": "Heimerdinger",
+      "slot": "Q",
+      "cooldowns": [
+        20.0,
+        20.0,
+        20.0,
+        20.0,
+        20.0
+      ],
+      "chargeCaps": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/74.json"
+    },
+    {
+      "id": "Ivern",
+      "slot": "W",
+      "cooldowns": [
+        20.0,
+        20.0,
+        20.0,
+        20.0,
+        20.0
+      ],
+      "chargeCaps": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/427.json"
+    },
+    {
+      "id": "Jhin",
+      "slot": "E",
+      "cooldowns": [
+        24.0,
+        21.5,
+        19.0,
+        16.5,
+        14.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/202.json"
+    },
+    {
+      "id": "Kalista",
+      "slot": "W",
+      "cooldowns": [
+        90.0,
+        80.0,
+        70.0,
+        60.0,
+        50.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/429.json"
+    },
+    {
+      "id": "Milio",
+      "slot": "E",
+      "cooldowns": [
+        17.0,
+        16.0,
+        15.0,
+        14.0,
+        13.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/902.json"
+    },
+    {
+      "id": "Nilah",
+      "slot": "E",
+      "cooldowns": [
+        26.0,
+        22.5,
+        19.0,
+        15.5,
+        12.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/895.json"
+    },
+    {
+      "id": "Rumble",
+      "slot": "E",
+      "cooldowns": [
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/68.json"
+    },
+    {
+      "id": "Teemo",
+      "slot": "R",
+      "cooldowns": [
+        35.0,
+        30.0,
+        25.0
+      ],
+      "chargeCaps": [
+        3,
+        4,
+        5
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/17.json"
+    },
+    {
+      "id": "Velkoz",
+      "slot": "W",
+      "cooldowns": [
+        18.0,
+        17.0,
+        16.0,
+        15.0,
+        14.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/161.json"
+    },
+    {
+      "id": "Vi",
+      "slot": "E",
+      "cooldowns": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/254.json"
+    },
+    {
+      "id": "Zyra",
+      "slot": "W",
+      "cooldowns": [
+        16.0,
+        14.5,
+        13.0,
+        11.5,
+        10.0
+      ],
+      "chargeCaps": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "source": "https://raw.communitydragon.org/16.21/plugins/rcp-be-lol-game-data/global/default/v1/champions/143.json"
+    }
+  ]
+}

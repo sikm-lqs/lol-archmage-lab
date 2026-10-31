@@ -23,15 +23,13 @@ test('preserve all equal minima, not merely the highest-ranked skills', () => {
 });
 test('unknown interactions and missing data are excluded; charges included with annotation', () => {
   const result = analyzeChampion({ spells: [skill('Q', [5]), skill('W', [5], 'review'),
-    skill('E', [5], 'charge'), skill('R', [0], 'missing')] });
+    { ...skill('E', [5], 'charge'), chargeCaps: [2] }, skill('R', [0], 'missing')] });
   assert.equal(result.pairs.length, 1);
   assert.equal(result.pairs[0].id, 'Q+E');
   assert.equal(result.pairs[0].estimated, true);
 });
-test('include R and do not impose an arbitrary haste cap', () => {
-  const result = analyzeChampion({ spells: [skill('Q', [5]), skill('R', [100])] });
-  assert.equal(result.pairs[0].id, 'Q+R');
-  assert.ok(result.haste > 500);
+test('hide pairs above 500 haste', () => {
+  assert.equal(analyzeChampion({ spells: [skill('Q', [5]), skill('R', [100])] }).pairs.length, 0);
 });
 test('threshold satisfies both directions; any lower value fails at least one', () => {
   for (const a of [1, 3, 8, 10, 22, 120]) for (const b of [2, 5, 10, 60]) {
@@ -48,4 +46,33 @@ test('search accepts Chinese names, titles, English names and whitespace; empty 
   assert.equal(searchChampions(rows, '黑暗')[0].id, 'Annie');
   assert.equal(searchChampions(rows, '').length, 2);
   assert.equal(searchChampions(rows, '没有').length, 0);
+});
+
+test('charged batches sustain BOTH refill directions and respect rank capacity', () => {
+  const e = { ...skill('E', [17, 16, 15, 14, 13], 'charge'), chargeCaps: [3, 3, 4, 4, 5] };
+  const pair = analyzePair(e, skill('R', [160, 140, 120]));
+  assert.equal(pair, null); // Best E5 x5 / R3 needs 515.3846, beyond the cap.
+  const reachable = analyzePair({ ...e, cooldowns: [17,16,15,14,14] }, skill('R', [120]));
+  assert.equal(reachable.best[0].castsA, 5);
+  assert.equal(reachable.best[0].rankA, 5);
+  assert.ok(Math.abs(reachable.haste - (120 / (.3*70)-1)*100) < 1e-9);
+});
+test('Ashe E4/R3 permits simple equal-CD one-to-one cycling', () => {
+  const pair = analyzePair({ ...skill('E', [90, 80, 70, 60, 50], 'charge'), chargeCaps: [2,2,2,2,2] }, skill('R', [100,80,60]));
+  const c = pair.combos.find(c => c.rankA === 4 && c.rankB === 3);
+  assert.ok(Math.abs(c.haste - 700/3) < 1e-10);
+  assert.equal(c.castsA, 1);
+});
+test('batch refill cannot spend an initially full magazine indefinitely', () => {
+  const pair = analyzePair({ ...skill('E', [100], 'charge'), chargeCaps: [5] }, skill('R', [10]));
+  assert.equal(pair, null);
+});
+test('unknown capacities and double-charge pairs are not presented as proven minima', () => {
+  const a = { ...skill('E', [10], 'charge'), chargeCaps: [3] };
+  assert.equal(analyzePair(a, skill('Q', [10], 'charge')), null);
+  assert.equal(analyzePair(a, { ...a, slot: 'R' }), null);
+});
+test('500 is inclusive; thresholds just above it are excluded before display rounding', () => {
+  assert.ok(analyzePair(skill('Q', [10]), skill('W', [18])));
+  assert.equal(analyzePair(skill('Q', [10]), skill('W', [18.000001])), null);
 });
