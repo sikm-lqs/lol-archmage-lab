@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1119">
+    <meta name="description" content="海克斯大乱斗大法师互刷研究工具：搜索英雄，比较技能加点，计算无限互刷所需的最低技能急速。">
+    <title>大法师 · 互刷研究所</title>
+    <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./src/style.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#detail">跳至英雄详情</a>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="大法师互刷研究所首页">
+        <span class="brand-mark" aria-hidden="true">∞</span>
+        <span>大法师<span class="brand-divider">/</span><span class="brand-sub">互刷研究所</span></span>
+      </a>
+      <div class="top-meta"><span class="live-dot"></span>海克斯大乱斗<span class="top-separator">·</span><span id="patch">固定数据快照</span></div>
+      <button class="quiet-button" id="model-open">计算模型 <span aria-hidden="true">↗</span></button>
+    </header>
+    <main class="page">
+      <section class="intro" aria-labelledby="page-title">
+        <div><p class="eyebrow">ARCHMAGE / COOLDOWN LAB</p><h1 id="page-title">两种技能，一场无限循环<span class="gold">。</span></h1>
+          <p class="intro-copy">找到恰好的加点，让每一次施法，为下一次清空冷却。</p></div>
+        <div class="intro-stats" aria-label="模型参数"><div><strong>30<span>%</span></strong><span>基础冷却返还</span></div><span class="stat-divider"></span><div><strong id="champion-count">—</strong><span>英雄数据快照</span></div></div>
+      </section>
+      <div class="notice"><span class="notice-icon" aria-hidden="true">i</span><p><strong>理论计算，不等于实战保证。</strong>忽略施法耗时与自然冷却；充能按单层回复时间估算，特殊交互单独标注。数据未核验全部模式修正。</p></div>
+      <div class="workspace">
+        <aside class="explorer" aria-label="英雄搜索与列表">
+          <div class="explorer-head"><div class="section-label">英雄索引 <span id="result-count">—</span></div>
+            <label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索英雄名 / 称号 / 英文名" aria-label="搜索英雄"><kbd>/</kbd></label>
+            <div class="filter-row"><label><input id="include-r" type="checkbox" checked>包含 R</label><label><input id="include-charges" type="checkbox" checked>充能估算</label>
+              <label class="sr-only" for="sort">英雄排序</label><select id="sort"><option value="haste">按最低急速</option><option value="name">按英雄名称</option></select></div>
+          </div>
+          <div class="list-heading"><span>英雄 / 最优技能对</span><span>最低急速</span></div>
+          <div id="champion-list" class="champion-list" role="group" aria-label="英雄列表"><p class="loading">正在加载英雄数据…</p></div>
+          <div class="explorer-footer">同门槛并列 · 不代表英雄强度排名</div>
+        </aside>
+        <section id="detail" class="detail" aria-label="英雄互刷分析" tabindex="-1"><div class="loading">正在建立你的研究台…</div></section>
+      </div>
+      <footer class="footer"><span>大法师互刷研究所 <span class="muted">/ 一个关于冷却的研究工具</span></span><button id="sources-open" class="text-button">数据来源与局限 ↗</button><p>本项目为非官方研究工具，与 Riot Games 无隶属、认可或赞助关系。游戏名称与素材归各权利人所有。</p></footer>
+    </main>
+    <dialog id="info-dialog" aria-labelledby="dialog-title"><div class="dialog-head"><p class="eyebrow">RESEARCH NOTES</p><button id="dialog-close" class="quiet-button" aria-label="关闭说明">关闭 ✕</button></div><h2 id="dialog-title"></h2><div id="dialog-body"></div></dialog>
+    <script type="module" src="./src/app.mjs"></script>
+  </body>
+</html>
