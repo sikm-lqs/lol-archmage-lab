@@ -12,6 +12,17 @@ export function integerHaste(haste) {
   return nearlyEqual(haste, integer) ? integer : Math.ceil(haste);
 }
 
+// Fixed-500 grace results must never tie with minimum-haste seamless results.
+export function compareOutcomes(a, b) {
+  if (a.mode !== b.mode) return a.mode === 'near' ? 1 : -1;
+  return a.haste - b.haste || a.remainingR - b.remainingR;
+}
+
+export function sameOptimum(a, b) {
+  return Boolean(a && b && a.mode === b.mode && nearlyEqual(a.haste, b.haste) &&
+    nearlyEqual(a.remainingR, b.remainingR));
+}
+
 export function analyzePair(a, b) {
   // A single charged ability can cast a bounded batch between ordinary casts.
   // Two charged abilities require a general interleaving solver: do not claim
@@ -26,20 +37,37 @@ export function analyzePair(a, b) {
     if (![capA, capB].every(n => Number.isInteger(n) && n > 0)) continue;
     const cycles = [];
     for (let castsA = 1; castsA <= capA; castsA++) for (let castsB = 1; castsB <= capB; castsB++) {
-      cycles.push({ castsA, castsB, haste: minimumHaste(castsA * cdA, castsB * cdB) });
+      const totalA = castsA * cdA, totalB = castsB * cdB;
+      const haste = minimumHaste(totalA, totalB);
+      if (haste <= 500) {
+        cycles.push({ castsA, castsB, haste, mode: 'seamless', remainingR: 0 });
+        continue;
+      }
+      // Only ordinary R may retain cooldown. The other skill must be fully
+      // restored by R's refund alone, without borrowing natural regeneration.
+      const rIsA = a.slot === 'R' && a.status === 'standard';
+      const rIsB = b.slot === 'R' && b.status === 'standard';
+      if (!rIsA && !rIsB) continue;
+      const totalR = rIsA ? totalA : totalB;
+      const totalOther = rIsA ? totalB : totalA;
+      const remainingR = totalR / 6 - .3 * totalOther;
+      if (totalOther / 6 <= .3 * totalR && remainingR > 0 && remainingR <= 5) {
+        cycles.push({ castsA, castsB, haste: 500, mode: 'near', remainingR });
+      }
     }
-    const haste = Math.min(...cycles.map(c => c.haste));
-    if (haste > 500) continue;
-    const bestCycles = cycles.filter(c => nearlyEqual(c.haste, haste));
-    combos.push({ rankA: i + 1, rankB: j + 1, cdA, cdB, haste, capA, capB,
+    if (!cycles.length) continue;
+    cycles.sort(compareOutcomes);
+    const { haste, mode, remainingR } = cycles[0];
+    const bestCycles = cycles.filter(c => sameOptimum(c, cycles[0]));
+    combos.push({ rankA: i + 1, rankB: j + 1, cdA, cdB, haste, mode, remainingR, capA, capB,
       castsA: bestCycles[0].castsA, castsB: bestCycles[0].castsB, cycles: bestCycles });
   }
   if (!combos.length) return null;
-  combos.sort((x, y) => x.haste - y.haste || x.rankA - y.rankA || x.rankB - y.rankB);
-  const haste = combos[0].haste;
+  combos.sort((x, y) => compareOutcomes(x, y) || x.rankA - y.rankA || x.rankB - y.rankB);
+  const { haste, mode, remainingR } = combos[0];
   return {
-    id: `${a.slot}+${b.slot}`, a, b, haste, combos,
-    best: combos.filter(c => nearlyEqual(c.haste, haste)),
+    id: `${a.slot}+${b.slot}`, a, b, haste, mode, remainingR, combos,
+    best: combos.filter(c => sameOptimum(c, combos[0])),
     estimated: a.status === 'charge' || b.status === 'charge',
   };
 }
@@ -53,9 +81,10 @@ export function analyzeChampion(champion, { includeR = true, includeCharges = tr
     const pair = analyzePair(spells[i], spells[j]);
     if (pair) pairs.push(pair);
   }
-  pairs.sort((a, b) => a.haste - b.haste || a.id.localeCompare(b.id));
+  pairs.sort((a, b) => compareOutcomes(a, b) || a.id.localeCompare(b.id));
   return { pairs, haste: pairs[0]?.haste ?? null,
-    best: pairs.filter(p => nearlyEqual(p.haste, pairs[0].haste)) };
+    mode: pairs[0]?.mode ?? null, remainingR: pairs[0]?.remainingR ?? null,
+    best: pairs.filter(p => sameOptimum(p, pairs[0])) };
 }
 
 export function searchChampions(champions, query) {

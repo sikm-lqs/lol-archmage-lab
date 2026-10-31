@@ -33,7 +33,7 @@ test('searches Chinese, title and English; empty results can be cleared', async 
   await search.fill('不存在的英雄000');
   await expect(page.locator('.empty')).toBeVisible();
   await page.getByRole('button', { name: '清空搜索' }).click();
-  await expect(page.locator('.champion-row')).toHaveCount(150);
+  await expect(page.locator('.champion-row')).toHaveCount(152);
 });
 
 test('preserves all tied ranks and lets users explore a non-optimal combination', async ({ page }) => {
@@ -138,10 +138,10 @@ for (const width of [320, 390, 768, 1024, 1440]) {
 }
 
 
-test('charge model shows rank capacity and sustained batches; GP ER is excluded, Ashe equal-CD case retained', async ({ page }) => {
+test('charge model shows rank capacity and sustained batches; GP ER grace retained, Ashe equal-CD case retained', async ({ page }) => {
   await page.getByRole('searchbox').fill('Gangplank');
   await page.locator('.champion-row').click();
-  await expect(page.locator('.pair-tab[data-pair="E+R"]')).toHaveCount(0);
+  await expect(page.locator('.pair-tab[data-pair="E+R"]')).toContainText('R 等');
   await page.locator('.skill-entry').nth(2).locator('summary').click();
   await expect(page.locator('.skill-entry').nth(2)).toContainText('5 级 · 5 层');
   await page.getByRole('searchbox').fill('Ashe');
@@ -155,4 +155,42 @@ test('charge model shows rank capacity and sustained batches; GP ER is excluded,
   await page.locator('.pair-tab[data-pair="W+R"]').click();
   await expect(page.locator('.refund-proof')).toContainText('W × 3 ↔ R × 1');
   await page.screenshot({ path: 'artifacts/preview-charge.png', fullPage: true });
+});
+
+
+for (const width of [320, 390, 1440]) {
+  test(`R grace: GP ER is honestly labelled, selectable and within ${width}px viewport`, async ({ page }) => {
+    await page.setViewportSize({width, height:1000});
+    await page.getByRole('searchbox').fill('Gangplank');
+    await page.locator('.champion-row').click();
+    await page.locator('.pair-tab[data-pair="E+R"]').click();
+    await expect(page.locator('.combo-tag.active')).toHaveText('E5 + R3');
+    await expect(page.locator('.near-notice')).toContainText('500 急速下近似循环，R 仍需等待 0.5 秒');
+    await expect(page.locator('.research-title')).toContainText('非无缝');
+    await expect(page.locator('.proof-row').first()).toContainText('R 仍需等待 0.5 秒');
+    await expect(page.locator('.proof-row').first()).not.toContainText('✓');
+    await expect(page.locator('.proof-row').last()).toContainText('✓');
+    await expect(page.locator('.research-footnote')).not.toContainText('整数急速至少');
+    await expect(page.locator('#rank-a option[value="2"]')).toHaveCount(0);
+    await page.locator('#rank-b').selectOption('2');
+    await expect(page.locator('.near-notice')).toContainText('3.83 秒');
+    await page.locator('#rank-a').selectOption('1');
+    await expect(page.locator('#rank-b')).toHaveValue('3');
+    await expect(page.locator('.near-notice')).toContainText('4.7 秒');
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    await page.screenshot({path:`artifacts/preview-r-grace-${width}.png`,fullPage:true});
+    await page.getByLabel('包含 R', {exact:true}).uncheck();
+    await expect(page.locator('.pair-tab[data-pair="E+R"]')).toHaveCount(0);
+    await expect(page.locator('.near-notice')).toHaveCount(0);
+  });
+}
+test('R grace: near-only heroes never claim a minimum seamless threshold', async ({ page }) => {
+  await page.getByRole('searchbox').fill('Veigar');
+  await expect(page.locator('.champion-row')).toContainText('R 等');
+  await page.locator('.champion-row').click();
+  await expect(page.locator('.summary-main')).toContainText('固定 500 急速');
+  await expect(page.locator('.summary-main')).not.toContainText('整数急速至少');
+  await expect(page.locator('.near-notice')).toContainText('不是无缝互刷');
+  await page.getByRole('button', {name:'计算模型'}).click();
+  await expect(page.getByRole('dialog')).toContainText('R 剩余冷却 ≤ 5 秒');
 });

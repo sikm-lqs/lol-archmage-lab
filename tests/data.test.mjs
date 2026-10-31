@@ -51,16 +51,32 @@ test('all computed combinations independently satisfy both refund inequalities',
   for (const c of data.champions) {
     const result = analyzeChampion(c);
     for (const p of result.pairs) {
-      const min = Math.min(...p.combos.map(combo => combo.haste));
-      assert.equal(p.best.length, p.combos.filter(combo => nearlyEqual(combo.haste, min)).length);
+      const seamless = p.combos.filter(c => c.mode === 'seamless');
+      const pool = seamless.length ? seamless : p.combos;
+      const min = Math.min(...pool.map(c => seamless.length ? c.haste : c.remainingR));
+      const expected = pool.filter(c => nearlyEqual(seamless.length ? c.haste : c.remainingR, min));
+      assert.deepEqual(p.best, expected);
       for (const combo of p.combos) {
         const factor = 1 + combo.haste / 100;
         assert.ok(combo.haste <= 500);
         assert.ok(combo.castsA <= combo.capA && combo.castsB <= combo.capB);
         if (p.a.status === 'charge') assert.equal(combo.capA, p.a.chargeCaps[combo.rankA - 1]);
         if (p.b.status === 'charge') assert.equal(combo.capB, p.b.chargeCaps[combo.rankB - 1]);
-        assert.ok(combo.castsA * combo.cdA / factor <= .3 * combo.castsB * combo.cdB + 1e-8, `${c.id} ${p.id}`);
-        assert.ok(combo.castsB * combo.cdB / factor <= .3 * combo.castsA * combo.cdA + 1e-8, `${c.id} ${p.id}`);
+        const graceA = combo.mode === 'near' && p.a.slot === 'R' ? combo.remainingR : 0;
+        const graceB = combo.mode === 'near' && p.b.slot === 'R' ? combo.remainingR : 0;
+        if (combo.mode === 'near') {
+          assert.equal(combo.haste, 500);
+          assert.ok(combo.remainingR > 0 && combo.remainingR <= 5);
+          assert.ok([p.a,p.b].some(s=>s.slot==='R' && s.status==='standard'));
+          const residual = p.a.slot === 'R' ? combo.cdA / 6 - .3 * combo.castsB * combo.cdB :
+            combo.cdB / 6 - .3 * combo.castsA * combo.cdA;
+          assert.ok(nearlyEqual(residual, combo.remainingR));
+        } else assert.equal(combo.remainingR, 0);
+        for (const cycle of combo.cycles) {
+          assert.ok(cycle.castsA <= combo.capA && cycle.castsB <= combo.capB);
+          assert.ok(cycle.castsA * combo.cdA / factor <= .3 * cycle.castsB * combo.cdB + graceA + 1e-8, `${c.id} ${p.id}`);
+          assert.ok(cycle.castsB * combo.cdB / factor <= .3 * cycle.castsA * combo.cdA + graceB + 1e-8, `${c.id} ${p.id}`);
+        }
       }
     }
   }
@@ -70,7 +86,7 @@ test('all computed combinations independently satisfy both refund inequalities',
 test('charge capacities are rank-indexed from the locked primary snapshot', () => {
   const gp = data.champions.find(c => c.id === 'Gangplank');
   assert.deepEqual(gp.spells[2].chargeCaps, [3,3,4,4,5]);
-  assert.ok(!analyzeChampion(gp).pairs.some(p => p.id === 'E+R'));
+  assert.equal(analyzeChampion(gp).pairs.find(p => p.id === 'E+R').remainingR, .5);
   for (const c of data.champions) for (const s of c.spells) if (s.status === 'charge') {
     assert.equal(s.chargeCaps.length, s.maxRank);
     assert.ok(s.chargeCaps.every(n => Number.isInteger(n) && n > 0));

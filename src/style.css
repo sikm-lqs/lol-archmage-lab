@@ -134,6 +134,13 @@
   h4 { font-size: 16px; font-weight: 500; margin-top: 4px; }
   .status-pill { font-size: 9px; padding: 4px 8px; border-radius: 4px; color: var(--teal); border: 1px solid #325047; background: #142823; white-space: nowrap; }
   .status-pill.estimated { color: var(--gold); background: #27261e; border-color: #5e5135; }
+  .status-pill.near { color: #f0c58d; background: #33281c; border-color: #8a673e; }
+  .near-notice { margin-top: 16px; padding: 14px; border: 1px solid #8a673e; border-radius: 5px; background: #2c241b; color: #f0c58d; font-size: 12px; }
+  .near-notice strong { font-weight: 500; }
+  .near-notice p { margin-top: 6px; color: #cbbba7; font-size: 11px; }
+  .pair-tab.near small, .near-text, .proof-check.proof-wait { color: #f0c58d; }
+  .pair-tab.near { border-style: dashed; }
+  .refund-proof.near { border-color: #765c3d; }
   .optimal-combos { border-block: 1px solid var(--soft-border); padding: 16px 0; margin: 18px 0; }
   .combo-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; font-size: 10px; color: var(--muted); }
   .combo-heading strong { color: #b7bbae; font-size: 9px; font-weight: 400; }
